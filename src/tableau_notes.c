@@ -8,7 +8,7 @@ int main()
 
     for (int i = 0; i < 5; i++)
     {
-        printf("%d\n",i);
+        printf("%d\n",tableau[i]);
     }
 
     return 0;
