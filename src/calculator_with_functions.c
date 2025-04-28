@@ -1,6 +1,19 @@
 #include <stdio.h>
 
+void erreur_division()
+{
+    printf("Division par zéro impossible.\n");
+}
 
+void erreur_modulo()
+{
+    printf("Modulo par zéro impossible.\n");
+}
+
+void erreur_operateur()
+{
+    printf("Opérateur inconnu.\n");
+}
 
 int addition(int a, int b)
 {
@@ -21,7 +34,7 @@ int division(int a, int b)
 {
     if (b == 0)
     {
-        printf("Division par zéro impossible.\n");
+        erreur_division();
         return 9999999;
     }
 
@@ -32,13 +45,30 @@ int modulo(int a, int b)
 {
     if (b == 0)
     {
-        printf("Modulo par zéro impossible.\n");
+        erreur_modulo();
         return 9999999;
 
     }
 
     return a % b;
 }
+
+void message_bienvenue()
+{
+    printf("Bienvenue dans la calculatrice ! \n");
+}
+
+void menu()
+{
+    printf("Veuillez choisir une opération :\n");
+    printf("+ pour addition\n");
+    printf("- pour soustraction\n");
+    printf("* pour multiplication\n");
+    printf("/ pour division\n");
+    printf("%% pour modulo.\n");
+}
+
+
 
 int calculer(int a, int b, char op)
 {
@@ -64,10 +94,12 @@ int calculer(int a, int b, char op)
     }
     else 
     {
-        printf("Opération non prise en compte.\n");
-        return -1;
+        erreur_operateur();
+        return 9999999;
     }
 }
+
+
 
 int main()
 {
@@ -78,19 +110,20 @@ int main()
 
     while (choix == 'o')
     {
+        message_bienvenue();
         printf("Choisissez un premier nombre.\n");
         scanf("%d",&a);
 
         printf("Choisissez un deuxième nombre.\n");
         scanf("%d",&b);
 
-        printf("Choisissez une opération (+,-,*,/,%%).\n");
+        menu();
         scanf(" %c",&op);
 
         int res = calculer(a,b,op);
         if (res != 9999999)
         {
-            printf("%d %c %d = %d\n",a,op,b,res);
+            printf("Résultat : %d %c %d = %d\n",a,op,b,res);
         }
 
 
