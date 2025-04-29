@@ -3,20 +3,23 @@
 
 if [ -z "$1" ]
 then
-    echo "Erreur : nom du fichier à compiler manquant"
+    echo "Vous n'avez pas fourni d'argument(s)."
     exit 1
 fi
 
-source_file="src/$1.c"
-output_file="bin/$1"
+sources=""
+output_file="main"
 
-gcc "$source_file" -o "$output_file"
+for file in "$@"
+do
+    sources="$sources src/$file.c"
+done
 
-if [ $? -eq 0 ]
+if gcc $sources -I include -o bin/$output_file
 then
-    echo "Compilation réussie."
-    ./$output_file
+    echo "✅ Compilation réussie."
+    ./bin/$output_file
 else
-    echo "Erreur de compilation"
+    echo "❌ Erreur de compilation."
     exit 1
 fi
