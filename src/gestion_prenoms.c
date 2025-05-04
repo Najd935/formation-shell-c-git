@@ -75,6 +75,49 @@ void supprimer_prenom(char prenoms[][20], int *nb_prenoms, char *prenom_supprime
 }
 
 
+void sauvegarder_prenoms(const char prenoms[][20], int nb_prenoms, const char *nom_fichier)
+
+{
+    FILE *f = fopen(nom_fichier,"w");
+    if (f == NULL)
+    {
+        printf("Impossible d'ouvrir le fichier %s en écriture.\n",nom_fichier);
+        return;
+    }
+
+    for (int i = 0; i < nb_prenoms; i++)
+    {
+        fprintf(f,"%s\n",prenoms[i]);
+
+    }
+
+    fclose(f);
+}
+void charger_prenoms(char prenoms[][20], int *nb_prenoms, const char *nom_fichier)
+
+{
+
+    FILE *f = fopen(nom_fichier,"r");
+
+    if (f == NULL)
+    {
+        printf("Fichier %s introuvable. Aucun prénom chargé.\n",nom_fichier);
+        return;
+    }
+
+    char prenom[20];
+
+    while (fgets(prenom,20,f) != NULL)
+    {
+        prenom[strcspn(prenom,"\n")] = '\0';
+        strcpy(prenoms[*nb_prenoms],prenom);
+        *nb_prenoms = *nb_prenoms + 1;
+    }
+
+    fclose(f);
+}
+
+
 void afficher_menu()
 {
     printf("1. Ajouter un prénom\n");

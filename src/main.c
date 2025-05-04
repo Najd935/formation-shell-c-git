@@ -7,6 +7,8 @@ int main()
 {
     char prenoms[50][20];
     int nb_prenoms = 0;
+
+    charger_prenoms(prenoms,&nb_prenoms,CHEMIN_FICHIER);
     int choix = -1;
 
     while(choix != 0)
@@ -18,6 +20,8 @@ int main()
         switch(choix)
         {
             case 0:
+                printf("Sauvegarde en cours...\n");
+                sauvegarder_prenoms(prenoms,nb_prenoms,CHEMIN_FICHIER);
                 printf("Au revoir!\n");
                 break;
             case 1:
@@ -59,6 +63,7 @@ int main()
                 supprimer_prenom(prenoms,&nb_prenoms,to_delete);
                 printf("Liste mise à jour.\n");
                 afficher_prenom(prenoms,nb_prenoms);
+                
                 break;
             }
 
