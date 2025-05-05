@@ -1,14 +1,14 @@
 #include <stdio.h>
 #include "gestion_prenoms.h"
 #include "string.h"
-
+#define MAX_PERSONNES 50
 
 int main()
 {
-    char prenoms[50][20];
-    int nb_prenoms = 0;
+    Personne personnes[MAX_PERSONNES];
+    int nb_personnes = 0;
 
-    charger_prenoms(prenoms,&nb_prenoms,CHEMIN_FICHIER);
+    charger_personnes(personnes,&nb_personnes,CHEMIN_FICHIER);
     int choix = -1;
 
     while(choix != 0)
@@ -21,14 +21,14 @@ int main()
         {
             case 0:
                 printf("Sauvegarde en cours...\n");
-                sauvegarder_prenoms(prenoms,nb_prenoms,CHEMIN_FICHIER);
+                sauvegarder_personnes(personnes,nb_personnes,CHEMIN_FICHIER);
                 printf("Au revoir!\n");
                 break;
             case 1:
-                ajouter_prenom(prenoms,&nb_prenoms);
+                ajouter_personne(personnes,&nb_personnes);
                 break;
             case 2:
-                afficher_prenom(prenoms,nb_prenoms);
+                afficher_personnes(personnes,nb_personnes);
                 break;
             case 3:
             {
@@ -37,7 +37,7 @@ int main()
                 fgets(to_find,20,stdin);
                 to_find[strcspn(to_find,"\n")] = '\0';
 
-                int res = rechercher_prenom(prenoms,nb_prenoms,to_find);
+                int res = rechercher_personne(personnes,nb_personnes,to_find);
                 if (res == -1)
                 {
                     printf("%s n'est pas dans la liste.\n",to_find);
@@ -50,8 +50,8 @@ int main()
             }
                 
             case 4:
-                trier_prenoms(prenoms,nb_prenoms);
-                afficher_prenom(prenoms,nb_prenoms);
+                trier_personnes(personnes,nb_personnes);
+                afficher_personnes(personnes,nb_personnes);
                 break;
             case 5:
             {
@@ -60,9 +60,9 @@ int main()
                 fgets(to_delete,20,stdin);
                 to_delete[strcspn(to_delete,"\n")] = '\0';
 
-                supprimer_prenom(prenoms,&nb_prenoms,to_delete);
+                supprimer_personne(personnes,&nb_personnes,to_delete);
                 printf("Liste mise à jour.\n");
-                afficher_prenom(prenoms,nb_prenoms);
+                afficher_personnes(personnes,nb_personnes);
                 
                 break;
             }

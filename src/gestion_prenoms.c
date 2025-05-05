@@ -1,37 +1,49 @@
 #include "gestion_prenoms.h"
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 
 
 
-void ajouter_prenom(char prenoms[][20], int *nb_prenoms)
-{
+void ajouter_personne(Personne personnes[], int *nb_personnes)
+{   
+    char name_buffer[20];
+
     printf("Choisis un prénom.\n");
-    fgets(prenoms[*nb_prenoms],20,stdin);
+    fgets(name_buffer,20,stdin);
+    name_buffer[strcspn(name_buffer,"\n")] = '\0';
+    strcpy(personnes[*nb_personnes].nom,name_buffer);
 
-    prenoms[*nb_prenoms][strcspn(prenoms[*nb_prenoms], "\n")] = '\0';
-    *nb_prenoms = *nb_prenoms + 1;
+    printf("Choisis un âge.\n");
+    scanf("%d",&personnes[*nb_personnes].age);
+
+    while (getchar() != '\n'); // on vide le buffer des retours à la ligne
+    (*nb_personnes)++;
 
 }
-void afficher_prenom(char prenoms[][20], int nb_prenoms)
+void afficher_personnes(Personne personnes[], int nb_personnes)
 {
-    if (nb_prenoms == 0)
+    if (nb_personnes == 0)
     {
-        printf("Liste vide.\n");
+        printf("Liste de personne vide.\n");
         return;
     }
-    for (int i = 0; i < nb_prenoms; i++)
+
+    printf("Liste de personnes : \n");
+    printf("--------------------\n");
+    for (int i = 0; i < nb_personnes; i++)
     {
-        printf("Prénom %d : %s\n", i + 1, prenoms[i]);
+        printf("Personne %d : %s, %d ans.\n", i + 1, personnes[i].nom,personnes[i].age);
     }
+    printf("\n");
 }
 
-int rechercher_prenom(char prenoms[][20], int nb_prenoms, char *prenom_recherche)
+int rechercher_personne(Personne personnes[], int nb_personnes, char *nom_recherche)
 {
-    for (int i = 0; i < nb_prenoms; i++)
+    for (int i = 0; i < nb_personnes; i++)
     {
-        if (strcmp(prenoms[i],prenom_recherche) == 0)
+        if (strcmp(personnes[i].nom,nom_recherche) == 0)
         {
             return i;
         }
@@ -40,42 +52,46 @@ int rechercher_prenom(char prenoms[][20], int nb_prenoms, char *prenom_recherche
     return -1;
 }
 
-void trier_prenoms(char prenoms[][20], int nb_prenoms)
+void trier_personnes(Personne personnes[], int nb_personnes)
 {
     char tmp[20];
 
-    for (int i = 0; i < nb_prenoms; i++)
+    for (int i = 0; i < nb_personnes; i++)
     {
-        for (int j = i + 1 ; j < nb_prenoms; j++)
+        for (int j = i + 1 ; j < nb_personnes; j++)
         {
-            if ( strcmp(prenoms[i],prenoms[j]) > 0 )
+            if ( strcmp(personnes[i].nom,personnes[j].nom) > 0 )
             {
-                strcpy(tmp,prenoms[i]);
-                strcpy(prenoms[i],prenoms[j]);
-                strcpy(prenoms[j],tmp);
+                strcpy(tmp,personnes[i].nom);
+                strcpy(personnes[i].nom,personnes[j].nom);
+                strcpy(personnes[j].nom,tmp);
             }
         }
     }
 }
 
-void supprimer_prenom(char prenoms[][20], int *nb_prenoms, char *prenom_supprime){
-    int position = rechercher_prenom(prenoms,*nb_prenoms,prenom_supprime);
-    if ( position == -1)
+void supprimer_personne(Personne personnes[], int *nb_personnes, char *prenom_supprime)
+{
+
+    int position = rechercher_personne(personnes,*nb_personnes,prenom_supprime);
+    if (position == -1)
     {
         printf("Prénom non trouvé, rien supprimé.\n");
         return;
     }
 
-    for (int i = position ; i < *nb_prenoms - 1; i++ )
+    for (int i = position ; i < *nb_personnes - 1; i++ )
     {
 
-        strcpy(prenoms[i],prenoms[i+1]);
+        strcpy(personnes[i].nom,personnes[i+1].nom);
+        personnes[i].age = personnes[i+1].age;
+
     }
-    *nb_prenoms = *nb_prenoms - 1;
+    *nb_personnes = *nb_personnes - 1;
 }
 
 
-void sauvegarder_prenoms(const char prenoms[][20], int nb_prenoms, const char *nom_fichier)
+void sauvegarder_personnes(Personne personnes[], int nb_personnes, const char *nom_fichier)
 
 {
     FILE *f = fopen(nom_fichier,"w");
@@ -85,15 +101,15 @@ void sauvegarder_prenoms(const char prenoms[][20], int nb_prenoms, const char *n
         return;
     }
 
-    for (int i = 0; i < nb_prenoms; i++)
+    for (int i = 0; i < nb_personnes; i++)
     {
-        fprintf(f,"%s\n",prenoms[i]);
+        fprintf(f,"%s;%d\n",personnes[i].nom,personnes[i].age);
 
     }
 
     fclose(f);
 }
-void charger_prenoms(char prenoms[][20], int *nb_prenoms, const char *nom_fichier)
+void charger_personnes(Personne personnes[], int *nb_personnes, const char *nom_fichier)
 
 {
 
@@ -101,19 +117,48 @@ void charger_prenoms(char prenoms[][20], int *nb_prenoms, const char *nom_fichie
 
     if (f == NULL)
     {
-        printf("Fichier %s introuvable. Aucun prénom chargé.\n",nom_fichier);
+        printf("Fichier %s introuvable. Aucune personne trouvée.\n",nom_fichier);
         return;
     }
+    char ligne[256];
 
-    char prenom[20];
-
-    while (fgets(prenom,20,f) != NULL)
+    while (fgets(ligne,256,f) != NULL)
     {
-        prenom[strcspn(prenom,"\n")] = '\0';
-        strcpy(prenoms[*nb_prenoms],prenom);
-        *nb_prenoms = *nb_prenoms + 1;
-    }
+        
+        ligne[strcspn(ligne,"\n")] = '\0';
+        char prenom[20];
+        char age[20];
+        int index_nom = 0;
+        int index_age = 0;
+        int i = 0;
+        
+        while (ligne[index_nom] != ';')
+        {
+            prenom[index_nom] = ligne[index_nom];
+            index_nom++;
+        }
+         // on saute le ';'
+        i = index_nom + 1;
 
+         while (ligne[i] != '\0')
+         {
+            age[index_age] = ligne[i];
+            index_age++;
+            i++;
+         }
+
+        prenom[index_nom] = '\0';
+        age[index_age] = '\0';
+        int age_personne = atoi(age);
+
+        Personne personne;
+        strcpy(personne.nom,prenom);
+        personne.age = age_personne;
+
+        personnes[*nb_personnes] = personne;
+        (*nb_personnes)++;
+        
+    }
     fclose(f);
 }
 
