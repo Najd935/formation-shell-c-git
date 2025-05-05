@@ -1,7 +1,13 @@
 #include <stdio.h>
-#include "gestion_prenoms.h"
 #include "string.h"
+
+#include "personne.h"
+#include "gestion_personnes.h"
+#include "gestion_fichier.h"
+
+
 #define MAX_PERSONNES 50
+#define CHEMIN_FICHIER "data/prenoms.txt"
 
 int main()
 {
