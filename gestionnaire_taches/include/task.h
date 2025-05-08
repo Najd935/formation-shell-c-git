@@ -17,6 +17,8 @@ void display_tasks(Task* tasks, int task_count);
 void delete_task_by_id(Task* tasks, int* task_count, int id_to_delete);
 int find_task_by_id(Task* tasks, int task_count, int id);
 void load_tasks_from_file(const char *filename, Task **tasks, int *task_count, int *capacity, int *current_id);
+void save_tasks_to_file(const char *filename, Task *tasks, int task_count);
+
 
 
 #endif

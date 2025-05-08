@@ -191,3 +191,28 @@ void load_tasks_from_file(const char *filename, Task **tasks, int *task_count, i
 
     fclose(csv);
 }
+
+
+void save_tasks_to_file(const char *filename, Task *tasks, int task_count)
+{
+    if (task_count == 0) return;
+
+    FILE *csv = fopen(filename,"w");
+    if (!csv) 
+    {
+        printf("Could not open the file %s\n",filename);
+        return;
+    }
+
+    //csv header
+    fprintf(csv,"id;description;date;priority;status\n");
+
+    for (int i = 0 ; i < task_count; i++)
+    {
+        Task task = tasks[i];
+        fprintf(csv,"%d;%s;%s;%d;%d\n",task.id,task.description,task.date,task.priority,task.status);
+
+    }
+
+    fclose(csv);
+}

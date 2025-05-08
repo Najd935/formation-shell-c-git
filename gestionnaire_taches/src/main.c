@@ -5,6 +5,8 @@
 #include "task.h"
 #include "menu.h"
 
+#define FILENAME "data/taches.txt"
+
 int main()
 {
     int capacity = 2;
@@ -43,9 +45,11 @@ int main()
             break;
         }
         case 4 :
-            load_tasks_from_file("data/taches.txt",&tasks,&task_count,&capacity,&current_id);
+            load_tasks_from_file(FILENAME,&tasks,&task_count,&capacity,&current_id);
             break;
-        
+        case 5 :
+            save_tasks_to_file(FILENAME,tasks,task_count);
+            break;
         case 0:
             printf("Bye !\n");
             break;
