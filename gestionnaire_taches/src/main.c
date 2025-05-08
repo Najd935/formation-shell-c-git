@@ -23,7 +23,6 @@ int main()
     do
     {
         display_menu();
-        printf("Choice : ");
         scanf("%d",&choice);
         getchar();
 
@@ -34,6 +33,17 @@ int main()
             break;
         case 2:
             display_tasks(tasks,task_count);
+            break;
+        case 3 :
+        {
+            printf("Select an id : ");
+            int to_delete;
+            scanf("%d",&to_delete);
+            delete_task_by_id(tasks,&task_count,to_delete);
+            break;
+        }
+        case 4 :
+            load_tasks_from_file("data/taches.txt",&tasks,&task_count,&capacity,&current_id);
             break;
         
         case 0:
