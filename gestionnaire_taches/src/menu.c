@@ -1,15 +1,12 @@
 #include "menu.h"
-#include "stdio.h"
+#include <stdio.h>
 
-
-
-void afficher_menu()
+void display_menu()
 {
-    printf("=== Gestionnaire de Tâches ===\n\n");
-    printf("1. Ajouter une tâche\n");
-    printf("2. Afficher les tâches\n");
-    printf("0. Quitter\n\n");
+    printf("=== Task Manager ===\n\n");
+    printf("1. Add a task\n");
+    printf("2. Display tasks\n");
+    printf("0. Quit\n\n");
 
-    printf("Votre choix :\n");
-
+    printf("Your choice:\n");
 }

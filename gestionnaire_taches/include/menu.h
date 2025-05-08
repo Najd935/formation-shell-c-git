@@ -2,7 +2,7 @@
 #define MENU_H
 
 
-void afficher_menu();
+void display_menu();
 
 
 #endif
